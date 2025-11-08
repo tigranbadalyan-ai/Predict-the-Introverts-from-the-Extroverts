@@ -74,25 +74,25 @@ The work was developed as part of the **Kaggle Playground Series (Season 5, Epis
 
 ### 5.1. Logistic Regression
 
-* **5-Fold Stratified CV Accuracy:** ~0.789  
-* **Train Accuracy:** ~0.79  
-* **Train F1 Score:** ~0.79  
-* **Train ROC-AUC:** ~0.85  
+* **5-Fold Stratified CV Accuracy:** ~0.965  
+* **Train Accuracy:** ~0.963  
+* **Train F1 Score:** ~0.966 
+* **Train ROC-AUC:** ~0.963
 
 ### 5.2. Random Forest
 
-* **5-Fold Stratified CV Accuracy:** ~0.810  
-* **Train Accuracy:** ~0.81  
-* **Train F1 Score:** ~0.81  
-* **Train ROC-AUC:** ~0.88  
+* **5-Fold Stratified CV Accuracy:** ~0.972 
+* **Train Accuracy:** ~0.966
+* **Train F1 Score:** ~0.977 
+* **Train ROC-AUC:** ~0.975
 
 ### 5.3. XGBoostClassifier (Final Model)
 
 * Selected as the **final model** due to highest cross-validation accuracy and ability to handle composite features  
-* **5-Fold Stratified CV Accuracy:** ~0.825  
-* **Train Accuracy:** ~0.83  
-* **Train F1 Score:** ~0.83  
-* **Train ROC-AUC:** ~0.91  
+* **5-Fold Stratified CV Accuracy:** ~0.976 
+* **Train Accuracy:** ~0.967
+* **Train F1 Score:** ~0.977 
+* **Train ROC-AUC:** ~0.965
 
 *Confusion Matrix on training data:*  
 
