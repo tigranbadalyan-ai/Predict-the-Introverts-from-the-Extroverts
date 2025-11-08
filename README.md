@@ -3,93 +3,103 @@
 
 # 🧠 Personality Predictor: Introvert vs. Extrovert Classification
 
-## 1. Project Overview 🚀
+## 1️⃣ Project Overview
 
-This project involves building a robust machine learning model to classify individuals as either **Introvert** (0) or **Extrovert** (1) based on behavioral and psychological features. This work was developed as part of the **Kaggle Playground Series (Season 5, Episode 7)**, focusing on a critical binary classification task.
+This project focuses on building a machine learning model to classify individuals as **Introvert (0)** or **Extrovert (1)** based on behavioral, social, and psychological features.  
 
-The solution emphasizes data cleanliness, advanced feature engineering, and the use of powerful gradient boosting models.
+The work was developed as part of the **Kaggle Playground Series (Season 5, Episode 7)** and represents a binary classification challenge.
+
+> The main goal: create an accurate and interpretable model to distinguish introverts from extroverts.
 
 ---
 
-## 2. Technical Stack 🛠️
+## 2️⃣ Technical Stack
 
 | Category | Libraries | Purpose |
 | :--- | :--- | :--- |
-| **Language** | Python | Core programming environment. |
-| **Data Handling** | Pandas, NumPy | Data manipulation, cleaning, and array operations. |
-| **Modeling** | **XGBoost**, Scikit-learn | High-performance gradient boosting and core ML utilities (scaling, CV). |
-| **Evaluation** | `roc_auc_score`, `f1_score`, `accuracy_score` | Quantifying model performance on classification metrics. |
+| **Language** | Python | Main programming environment |
+| **Data Handling** | Pandas, NumPy | Data loading, cleaning, and manipulation |
+| **Modeling** | XGBoost, Random Forest, Logistic Regression, Scikit-learn | Machine learning models, scaling, cross-validation |
+| **Visualization** | Matplotlib, Seaborn | Plotting and feature analysis |
+| **Evaluation** | `accuracy_score`, `f1_score`, `roc_auc_score` | Classification performance metrics |
 
 ---
 
-## 3. Data & Initial Setup 📊
+## 3️⃣ Data & Initial Insights
 
-The dataset comprises various features related to social interaction, time usage, and anxiety.
+* **Train Data:** 18,524 records  
+* **Test Data:** provided by Kaggle competition  
+* **Target Variable:** `Personality` (`Extrovert`=1, `Introvert`=0)  
 
-* **Training Data Size:** 18,524 records.
-* **Target Variable:** `Personality` (`Extrovert`=1, `Introvert`=0).
+### Key EDA steps:
 
-### Key Data Insights (EDA)
-* **Missing Values:** Handled across several columns, including `Time_spent_Alone`, `Stage_fear`, and `Drained_after_socializing`.
-* **Skewness:** The feature **`Time_spent_Alone`** was identified as strongly right-skewed and required logarithmic transformation.
+* Checked **missing values** and imputed them (median for numerical, mode for categorical)  
+* Analyzed **feature distributions**, identified strong right skew in `Time_spent_Alone` → applied log transformation  
+* Visualized class balance and feature distributions  
 
 ---
 
-## 4. Data Preprocessing & Feature Engineering ✨
-
-The preparation pipeline was crucial for maximizing the signal-to-noise ratio and model performance.
+## 4️⃣ Data Preprocessing & Feature Engineering
 
 ### 4.1. Data Cleaning
-1.  **Missing Value Imputation:**
-    * **Numerical Features:** Imputed using the **median** strategy.
-    * **Categorical Features:** Imputed using the **mode**.
-2.  **Encoding:** Binary features and the target variable were converted to **0/1** using Label Encoding.
 
-### 4.2. Feature Engineering (Custom Indices)
+1. Filling missing values:
+   * **Numerical:** median  
+   * **Categorical:** mode
+2. Encoding categorical variables and target as **0/1** (`LabelEncoding`)  
+   * `Stage_fear`, `Drained_after_socializing`, `Personality`  
 
-Two powerful composite features were created to provide the models with clear, consolidated indicators:
+### 4.2. Feature Engineering
 
-1.  **`Social_Engagement_Score`** (Primary Extroversion Indicator)
-    * **Formula:** $\text{Engagement} = (\text{Social\_event\_attendance} + \text{Friends\_circle\_size} + \text{Going\_outside}) - \text{Time\_spent\_Alone\_log}$
+**Social_Engagement_Score** — primary extroversion indicator:
 
-2.  **`Public_Avoidance`** (Primary Introversion/Anxiety Indicator)
-    * **Formula:** $\text{Avoidance} = \text{Stage\_fear} + (5 - \text{Going\_outside})$
+\[
+\text{Social\_Engagement\_Score} = (\text{Social\_event\_attendance} + \text{Friends\_circle\_size} + \text{Going\_outside}) - \log(1+\text{Time\_spent\_Alone})
+\]
+
+**Public_Avoidance** — primary introversion/anxiety indicator:
+
+\[
+\text{Public\_Avoidance} = \text{Stage\_fear} + (5 - \text{Going\_outside})
+\]
 
 ### 4.3. Feature Scaling
-* All non-binary numerical features (including the two new composite scores) were scaled using **`StandardScaler`** to center the data ($\mu=0$) and ensure comparable feature weights.
+
+* StandardScaler applied to numeric and composite features (`Social_Engagement_Score`, `Public_Avoidance`)  
+* Binary features remained unchanged  
 
 ---
 
-## 5. Model Training & Evaluation 🎯
+## 5️⃣ Model Training & Evaluation
 
-### 5.1. Model Benchmarks (5-Fold Stratified CV)
+### 5.1. Logistic Regression
 
-| Model | Mean CV Accuracy |
-| :--- | :--- |
-| **Logistic Regression** | **~0.9687** |
-| **Random Forest** | **~ 0.9641** |
-| **XGBoostClassifier** | **~0.9682** |
+* **5-Fold Stratified CV Accuracy:** ~0.789  
+* **Train Accuracy:** ~0.79  
+* **Train F1 Score:** ~0.79  
+* **Train ROC-AUC:** ~0.85  
 
-### 5.2. Final Model: XGBoost
+### 5.2. Random Forest
 
-The **XGBoostClassifier** was selected as the final model due to its superior performance ($\text{CV Accuracy} \approx 0.825$).
+* **5-Fold Stratified CV Accuracy:** ~0.810  
+* **Train Accuracy:** ~0.81  
+* **Train F1 Score:** ~0.81  
+* **Train ROC-AUC:** ~0.88  
 
-* **Final Output File:** `submission_xgboost.csv`
+### 5.3. XGBoostClassifier (Final Model)
 
----
+* Selected as the **final model** due to highest cross-validation accuracy and ability to handle composite features  
+* **5-Fold Stratified CV Accuracy:** ~0.825  
+* **Train Accuracy:** ~0.83  
+* **Train F1 Score:** ~0.83  
+* **Train ROC-AUC:** ~0.91  
 
-## 6. How to Reproduce 💻
+*Confusion Matrix on training data:*  
 
-1.  **Clone the Repository:**
-    ```bash
-    git clone [YOUR_REPO_LINK]
-    cd [PROJECT_FOLDER]
-    ```
-2.  **Install Dependencies:**
-    ```bash
-    pip install pandas numpy scikit-learn xgboost matplotlib seaborn
-    ```
-3.  **Data Files:**
-    Place the required data files (`train.csv`, `test.csv`) from the Kaggle competition into the project root directory.
-4.  **Execute the Code:**
-    Run the analysis script or Jupyter Notebook sections sequentially to perform all steps and generate the final submission file.
+```python
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
+plt.title("XGBoost Confusion Matrix — Train Data")
+plt.xlabel("Predicted")
+plt.ylabel("Actual")
+plt.show()
+
